@@ -17,15 +17,12 @@ api_key = os.getenv("GOOGLE_API_KEY")
 ## Configure genai
 genai.configure(api_key=api_key)
 
-prompt = """You are a helpful assistant that summarizes YouTube videos.
-
-Summarize the following transcript in a **structured format**:
-1. Start with a short 2 to 3 sentence introduction.
-2. Provide 4 to 5 bullet points highlighting the key ideas.
-3. End with a 1 to 2 sentence conclusion.
-
-(It should be long enough to cover the main points of the video)
-"""
+prompt = """You are a friendly and engaging assistant that summarizes YouTube videos in a way that feels like a conversation. Summarize the following transcript, keeping it friendly and easy to understand:
+            Start with a short introduction (2–3 sentences) that captures the key theme or problem the video addresses.
+            Use bullet points to highlight the key takeaways (4–8 points). Keep each point around 2–3 sentences and focus on the main message, examples, and any important stats or names mentioned.
+            Make it conversational by keeping the tone approachable and easy to follow. Add any humor or examples from the video that make it feel like a chat.
+            End with a short conclusion (2–3 sentences) that reinforces the main takeaway or solution from the video.
+            Make sure the summary is clear and concise, easy to skim, and captures all the important details without feeling overwhelming."""
 
 def gemini_content_generation(youtube_transcript, prompt):
     try:

@@ -5,10 +5,19 @@ In this file, we will transcript from the YouTube video for which we want to sum
 
 ## importing the transcript api
 from youtube_transcript_api import YouTubeTranscriptApi
+from urllib.parse import urlparse, parse_qs
 
 def fetching_transcript_details(youtube_video_url):
     try:
-        video_id = youtube_video_url.split("=")[-1]
+
+        parsed_url = urlparse(youtube_video_url)
+        query_params = parse_qs(parsed_url.query)
+        video_id = query_params.get("v")
+        
+        if not video_id:
+            raise ValueError("Invalid YouTube URL or missing video ID")
+
+        video_id = video_id[0] 
 
         # create an instance and call fetch(video_id)
         transcript_api = YouTubeTranscriptApi()
