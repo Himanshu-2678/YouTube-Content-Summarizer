@@ -77,8 +77,10 @@ def create_pdf(summary_text, video_url, language):
 
 
 # Initializing Firebase
+
+firebase_creds = st.secrets['firebase_key']
 if not firebase_admin._apps:
-    cred = credentials.Certificate("FIREBASE_KEY_CREDENTIALS")
+    cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {"databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"})
 
 
@@ -90,8 +92,8 @@ def app():
     if 'comments' not in st.session_state:
         st.session_state.comments = []  # Initialize comments as an empty list
 
-    st.title("YouTube Video Content Summarizer")
-    st.write("This app allows you to enter the YouTube video URL and get the summary of the entire video using Gemini-1.5-flash.")
+    st.title("Welcome to YouTubeDigest")
+    st.write("Get a quick summary of any YouTube video in your preferred language!")
 
     youtube_link = st.text_input("Enter YouTube video URL:")
 
