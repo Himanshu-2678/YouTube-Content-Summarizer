@@ -4,3 +4,12 @@ streamlit
 python-dotenv
 pathlib
 firebase_admin==5.2.0
+firebase-admin
+requests
+reportlab
+google-api-python-client
+google-auth
+google-auth-httplib2
+youtube-transcript-api
+
+
