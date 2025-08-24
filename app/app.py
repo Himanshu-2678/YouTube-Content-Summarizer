@@ -3,8 +3,8 @@ import sys
 import os
 import requests
 from io import BytesIO
-import json 
-import tempfile
+ 
+
 
 import firebase_admin
 from firebase_admin import credentials, db
@@ -84,14 +84,15 @@ def create_pdf(summary_text, video_url, language):
 # Retrieve Firebase credentials from Streamlit secrets
 firebase_creds = st.secrets['firebase_key']
 
-# Write the credentials to a temporary JSON file
-with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as tmp_file:
-    json.dump(firebase_creds, tmp_file)
-    tmp_file_path = tmp_file.name  # Get the path of the temporary file
+# The private key might have line breaks and escape sequences, we need to clean it up
+private_key = firebase_creds['private_key'].replace("\\n", "\n")
 
-# Initialize Firebase app with the temporary JSON file
+# Now pass the cleaned-up dictionary directly to credentials.Certificate()
+firebase_creds['private_key'] = private_key
+
+# Initialize Firebase app with the credentials
 if not firebase_admin._apps:
-    cred = credentials.Certificate(tmp_file_path)
+    cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {"databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"})
 
 
