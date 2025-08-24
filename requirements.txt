@@ -3,3 +3,4 @@ google-generativeai
 streamlit
 python-dotenv
 pathlib
+firebase_admin==5.2.0
