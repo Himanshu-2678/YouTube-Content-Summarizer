@@ -80,9 +80,9 @@ def create_pdf(summary_text, video_url, language):
 # Initializing Firebase
 
 firebase_creds = st.secrets['firebase_key']
-firebase_creds_json = json.loads(json.dumps(firebase_creds))
+#### firebase_creds_json = json.loads(json.dumps(firebase_creds))
 if not firebase_admin._apps:
-    cred = credentials.Certificate(firebase_creds_json)
+    cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {"databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"})
 
 
