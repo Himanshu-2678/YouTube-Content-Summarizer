@@ -79,21 +79,28 @@ def create_pdf(summary_text, video_url, language):
 
 
 
+
 # Initializing Firebase
 
 # Retrieve Firebase credentials from Streamlit secrets
-firebase_creds = st.secrets["firebase_key"]
+firebase_creds = {
+    "type": st.secrets["firebase_key"]["type"],
+    "project_id": st.secrets["firebase_key"]["project_id"],
+    "private_key_id": st.secrets["firebase_key"]["private_key_id"],
+    "private_key": st.secrets["firebase_key"]["private_key"].replace("\\n", "\n"),
+    "client_email": st.secrets["firebase_key"]["client_email"],
+    "client_id": st.secrets["firebase_key"]["client_id"],
+    "auth_uri": st.secrets["firebase_key"]["auth_uri"],
+    "token_uri": st.secrets["firebase_key"]["token_uri"],
+    "auth_provider_x509_cert_url": st.secrets["firebase_key"]["auth_provider_x509_cert_url"],
+    "client_x509_cert_url": st.secrets["firebase_key"]["client_x509_cert_url"]
+}
 
-# Clean up the private key (replace escaped "\n" with actual newlines)
-private_key = firebase_creds["private_key"].replace("\\n", "\n")
-
-# Update the dictionary with the cleaned-up private key
-firebase_creds["private_key"] = private_key
-
-# Initialize Firebase app with the updated credentials
+# Initialize Firebase app with the cleaned-up credentials
 if not firebase_admin._apps:
     cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {"databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"})
+
 
 
 
