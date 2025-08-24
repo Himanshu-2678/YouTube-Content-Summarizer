@@ -82,15 +82,15 @@ def create_pdf(summary_text, video_url, language):
 # Initializing Firebase
 
 # Retrieve Firebase credentials from Streamlit secrets
-firebase_creds = st.secrets['firebase_key'].copy()  # Create a copy of the secrets
+firebase_creds = st.secrets["firebase_key"]
 
-# The private key might have line breaks and escape sequences, we need to clean it up
-private_key = firebase_creds['private_key'].replace("\\n", "\n")
+# Clean up the private key (replace escaped "\n" with actual newlines)
+private_key = firebase_creds["private_key"].replace("\\n", "\n")
 
-# Now update the private_key in the copy of the credentials dictionary
-firebase_creds['private_key'] = private_key
+# Update the dictionary with the cleaned-up private key
+firebase_creds["private_key"] = private_key
 
-# Initialize Firebase app with the modified credentials
+# Initialize Firebase app with the updated credentials
 if not firebase_admin._apps:
     cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {"databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"})
