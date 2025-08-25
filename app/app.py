@@ -100,20 +100,22 @@ if not firebase_admin._apps:
     })
 '''
 
-# Get the Firebase key from Streamlit Cloud secrets
+# Load Firebase service account from Streamlit secrets
 firebase_key = st.secrets["FIREBASE_KEY"]
 
-# Parse JSON string
+# Parse JSON string into dict
 service_account_info = json.loads(firebase_key)
 
-# Convert \\n to real newlines for PEM
+# Convert \\n into real newlines for PEM
 service_account_info["private_key"] = service_account_info["private_key"].replace("\\n", "\n")
 
+# Initialize Firebase only once
 if not firebase_admin._apps:
     cred = credentials.Certificate(service_account_info)
-    firebase_admin.initialize_app(cred)
+    firebase_admin.initialize_app(cred, {
+        "databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"
+    })
 
-    
 
 # Building the Streamlit App
 def app():
