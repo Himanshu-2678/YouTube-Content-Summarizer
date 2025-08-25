@@ -101,7 +101,10 @@ if not firebase_admin._apps:
 '''
 
 # Load Firebase service account from Streamlit secrets
-firebase_key = st.secrets["FIREBASE_KEY"]
+load_dotenv() 
+
+# Use Streamlit Secrets if available, else fallback to local .env
+firebase_key = st.secrets.get("FIREBASE_KEY", os.getenv("FIREBASE_KEY"))
 
 # Parse JSON string into dict
 service_account_info = json.loads(firebase_key)
