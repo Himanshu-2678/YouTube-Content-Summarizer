@@ -82,19 +82,28 @@ def create_pdf(summary_text, video_url, language):
 
 # Initializing Firebase
 
-# Convert Streamlit secrets into a proper dict
+# Convert secrets to a dict
 firebase_creds = dict(st.secrets["firebase_key"])
 
-# Fix private key formatting (TOML may escape newlines as \n)
-firebase_creds["private_key"] = firebase_creds["private_key"].replace("\\n", "\n")
+# Normalize the private key
+private_key = firebase_creds["private_key"]
 
-# Initialize Firebase only once
+# Case 1: key comes with literal "\n"
+if "\\n" in private_key:
+    private_key = private_key.replace("\\n", "\n")
+
+# Case 2: key is in triple quotes with real newlines but TOML adds spaces
+private_key = "\n".join(line.strip() for line in private_key.splitlines() if line.strip())
+
+firebase_creds["private_key"] = private_key
+
+# Initialize Firebase app only once
 if not firebase_admin._apps:
-    cred = credentials.Certificate(firebase_creds)  # use the dict directly
+    cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"
     })
-
+    
 
 
 # Building the Streamlit App
