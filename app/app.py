@@ -82,33 +82,22 @@ def create_pdf(summary_text, video_url, language):
 
 # Initializing Firebase
 
-# Copy secrets into a dict
-firebase_creds = dict(st.secrets["firebase_key"])
+import json
+import firebase_admin
+from firebase_admin import credentials, db
 
-# Normalize private key formatting
-pk = firebase_creds["private_key"]
+# Load service account JSON from secrets
+service_account_info = json.loads(st.secrets["firebase_key"]["service_account"])
 
-# If it’s one line with "\n", expand it
-if "\\n" in pk:
-    pk = pk.replace("\\n", "\n")
-
-# Strip whitespace around lines and rebuild
-pk = "\n".join(line.strip() for line in pk.splitlines() if line.strip())
-
-# Ensure BEGIN/END lines exist
-if not pk.startswith("-----BEGIN PRIVATE KEY-----"):
-    pk = "-----BEGIN PRIVATE KEY-----\n" + pk
-if not pk.endswith("-----END PRIVATE KEY-----"):
-    pk = pk + "\n-----END PRIVATE KEY-----"
-
-firebase_creds["private_key"] = pk
-
-# Initialize Firebase once
+# Initialize Firebase app only once
 if not firebase_admin._apps:
-    cred = credentials.Certificate(firebase_creds)
+    cred = credentials.Certificate(service_account_info)
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"
     })
+
+
+
 
 # Building the Streamlit App
 def app():
