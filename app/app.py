@@ -82,30 +82,18 @@ def create_pdf(summary_text, video_url, language):
 
 # Initializing Firebase
 
-# Retrieve Firebase credentials from Streamlit secrets
-firebase_creds = {
-    "type": st.secrets["firebase_key"]["type"],
-    "project_id": st.secrets["firebase_key"]["project_id"],
-    "private_key_id": st.secrets["firebase_key"]["private_key_id"],
-    "private_key": st.secrets["firebase_key"]["private_key"].replace("\\n", "\n"),  # Ensure correct formatting
-    "client_email": st.secrets["firebase_key"]["client_email"],
-    "client_id": st.secrets["firebase_key"]["client_id"],
-    "auth_uri": st.secrets["firebase_key"]["auth_uri"],
-    "token_uri": st.secrets["firebase_key"]["token_uri"],
-    "auth_provider_x509_cert_url": st.secrets["firebase_key"]["auth_provider_x509_cert_url"],
-    "client_x509_cert_url": st.secrets["firebase_key"]["client_x509_cert_url"]
-}
+# Convert Streamlit secrets into a proper dict
+firebase_creds = dict(st.secrets["firebase_key"])
 
-# Ensure private key is properly formatted as a PEM string
-private_key = firebase_creds["private_key"]
-if not private_key.startswith("-----BEGIN PRIVATE KEY-----"):
-    raise ValueError("Invalid private key format")
+# Fix private key formatting (TOML may escape newlines as \n)
+firebase_creds["private_key"] = firebase_creds["private_key"].replace("\\n", "\n")
 
-# Initialize Firebase app with the cleaned-up credentials
+# Initialize Firebase only once
 if not firebase_admin._apps:
-    cred = credentials.Certificate(firebase_creds)
-    firebase_admin.initialize_app(cred, {"databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"})
-
+    cred = credentials.Certificate(firebase_creds)  # use the dict directly
+    firebase_admin.initialize_app(cred, {
+        "databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"
+    })
 
 
 
