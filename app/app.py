@@ -82,29 +82,33 @@ def create_pdf(summary_text, video_url, language):
 
 # Initializing Firebase
 
-# Convert secrets to a dict
+# Copy secrets into a dict
 firebase_creds = dict(st.secrets["firebase_key"])
 
-# Normalize the private key
-private_key = firebase_creds["private_key"]
+# Normalize private key formatting
+pk = firebase_creds["private_key"]
 
-# Case 1: key comes with literal "\n"
-if "\\n" in private_key:
-    private_key = private_key.replace("\\n", "\n")
+# If it’s one line with "\n", expand it
+if "\\n" in pk:
+    pk = pk.replace("\\n", "\n")
 
-# Case 2: key is in triple quotes with real newlines but TOML adds spaces
-private_key = "\n".join(line.strip() for line in private_key.splitlines() if line.strip())
+# Strip whitespace around lines and rebuild
+pk = "\n".join(line.strip() for line in pk.splitlines() if line.strip())
 
-firebase_creds["private_key"] = private_key
+# Ensure BEGIN/END lines exist
+if not pk.startswith("-----BEGIN PRIVATE KEY-----"):
+    pk = "-----BEGIN PRIVATE KEY-----\n" + pk
+if not pk.endswith("-----END PRIVATE KEY-----"):
+    pk = pk + "\n-----END PRIVATE KEY-----"
 
-# Initialize Firebase app only once
+firebase_creds["private_key"] = pk
+
+# Initialize Firebase once
 if not firebase_admin._apps:
     cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {
         "databaseURL": "https://content-summarizer-31c3a-default-rtdb.firebaseio.com/"
     })
-    
-
 
 # Building the Streamlit App
 def app():
