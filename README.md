@@ -40,7 +40,7 @@ YouTubeDigest is a Streamlit-based web app that converts YouTube video transcrip
   - `reportlab` for PDF generation  
   - `requests` for translation API calls  
   - `google-generativeai` (Gemini) for summary generation  
-- **Deployment:** Render / Local machine  
+
 
 ---
 
