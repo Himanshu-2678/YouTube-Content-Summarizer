@@ -35,7 +35,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 
-def create_pdf(summary_text, video_url, language):
+def create_pdf(summary_text, youtube_video_url, language):
     buffer = BytesIO()
     doc = SimpleDocTemplate(
         buffer,
@@ -54,7 +54,7 @@ def create_pdf(summary_text, video_url, language):
     story.append(Paragraph("YouTube Video Summary", title_style))
     story.append(Spacer(1, 8))
     story.append(Paragraph(f"Language: {language}", sub_style))
-    story.append(Paragraph(f"Video URL: {video_url}", sub_style))
+    story.append(Paragraph(f"Video URL: {youtube_video_url}", sub_style))
     story.append(Spacer(1, 16))
 
     for raw in summary_text.splitlines():
@@ -105,7 +105,8 @@ def app():
     if st.button("Generate Summary"):
         if youtube_link:
             try:
-                transcript = fetching_transcript_details(youtube_link)
+                with st.spinner("⏳ Fetching transcript..."):
+                    transcript = fetching_transcript_details(youtube_link)
 
                 prompt = """You are a friendly and engaging assistant that summarizes YouTube videos in a way that feels like a conversation. Summarize the following transcript, keeping it friendly and easy to understand:
                             - Start with a short introduction (3–6 sentences) that captures the key theme.
@@ -114,7 +115,8 @@ def app():
                             - End with a short conclusion (4–8 sentences)."""
 
                 if transcript:
-                    content_summary = gemini_content_generation(transcript, prompt)
+                    with st.spinner("✨ Generating summary..."):
+                        content_summary = gemini_content_generation(transcript, prompt)
 
                     if selected_language_code != "en":
                         content_summary = translate_text(content_summary, selected_language_code)
@@ -130,12 +132,13 @@ def app():
     if st.session_state.content_summary:
         pdf_buffer = create_pdf(st.session_state.content_summary, youtube_link, language)
 
+        file_name = f"youtube_summary_{video_id}.pdf"
+
         st.download_button(
             label="📄 Download Summary as PDF",
             data=pdf_buffer,
-            file_name="youtube_summary.pdf",
-            mime="application/pdf"
-        )
+            file_name=file_name,
+            mime="application/pdf")
 
         st.markdown("### Content Summary:")
         st.write(st.session_state.content_summary)
