@@ -61,7 +61,7 @@ Run locally:
 streamlit run app/app.py
 ```
 
-###Steps:
+### Steps:
 
 - Enter a YouTube video URL.
 - Select your preferred language.
