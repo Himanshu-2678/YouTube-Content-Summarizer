@@ -1,4 +1,4 @@
-# YouTubeDigest 🎥📄
+# YouTubeDigest 
 
 **Quick and friendly summaries of any YouTube video — delivered as easy-to-read text or PDF!**
 
@@ -6,7 +6,7 @@
 
 ## Demo Video
 
-Click to watch a short walkthrough of the app in action.
+[Click to watch a short walkthrough.](https://www.youtube.com/watch?v=Zl2JTqAB68E)
 
 ---
 
@@ -17,8 +17,6 @@ YouTubeDigest is a Streamlit-based web app that converts YouTube video transcrip
 - Generate bullet-point summaries of videos.
 - Translate summaries into multiple languages (English, Spanish, French, German, Hindi, Chinese, Japanese).
 - Download summaries as PDF for easy sharing.
-
-⚠️ **Note:** Cloud-hosted versions may be unable to fetch transcripts for some videos due to YouTube IP restrictions. The app works perfectly when run locally.
 
 ---
 
