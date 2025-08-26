@@ -73,21 +73,6 @@ def create_pdf(summary_text, video_url, language):
     return buffer
 
 
-## fetching the video title using pytube
-from pytube import YouTube
-import re
-
-def get_video_title(video_url):
-    try:
-        yt = YouTube(video_url)
-        title = yt.title
-        ## removing special characters from title
-        title = re.sub(r'[\\/*?:"<>|]', "", title)
-        return title
-    except Exception:
-        return "youtube_summary"
-
-
 
 # Building the Streamlit App 
 def app():
@@ -103,6 +88,7 @@ def app():
         video_id = youtube_link.split("=")[-1]
         st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", caption="Video Thumbnail", use_container_width=True)
 
+    ## adding multilingual support
     language = st.selectbox("Select your preferred Language:", ["English", "Spanish", "French", "German", "Hindi", "Chinese", "Japanese"])
 
     language_code = {
@@ -143,13 +129,11 @@ def app():
 
     if st.session_state.content_summary:
         pdf_buffer = create_pdf(st.session_state.content_summary, youtube_link, language)
-        video_title = get_video_title(youtube_link)
-        file_name = f"{video_title}_summary.pdf"
 
         st.download_button(
             label="📄 Download Summary as PDF",
             data=pdf_buffer,
-            file_name=file_name,
+            file_name="youtube_summary.pdf",
             mime="application/pdf"
         )
 
