@@ -70,6 +70,7 @@ streamlit run app/app.py
 View summary in the app and optionally download as PDF.
 
 ## Folder Structure
+```
 YouTube_Content_Summarizer/
 ├─ app/
 │   └─ app.py                  # Main Streamlit app
@@ -81,3 +82,4 @@ YouTube_Content_Summarizer/
 ├─ .gitignore
 ├─ README.md
 └─ requirements
+```
