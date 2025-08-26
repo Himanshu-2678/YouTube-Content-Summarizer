@@ -22,9 +22,9 @@ YouTubeDigest is a Streamlit-based web app that converts YouTube video transcrip
 
 ## Features
 
-- **Transcript Fetching:** Automatically retrieves YouTube video transcripts (if available).
+- **Transcript Fetching:** Automatically retrieves YouTube video transcripts using youtube-transcript-api
 - **LLM Summarization:** Uses a friendly, easy-to-read summarization prompt for key points and conclusions.
-- **Multilingual Support:** Translate summaries into your preferred language.
+- **Multilingual Support:** Translate summaries into your preferred language using MyMemoryAPI
 - **PDF Export:** Generate professional-looking PDFs with video title, URL, and bullet-point summary.
 - **Interactive Frontend:** Streamlit interface with video thumbnail previews and language selection.
 
